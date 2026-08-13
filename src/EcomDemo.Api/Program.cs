@@ -77,4 +77,7 @@ api.MapAccounts();
 api.MapProducts();
 api.MapBaskets();
 
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
+   .ExcludeFromDescription();
+
 app.Run();
