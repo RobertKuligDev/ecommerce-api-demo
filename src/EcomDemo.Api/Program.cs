@@ -67,8 +67,27 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
-app.UseSwagger();
-app.UseSwaggerUI();
+
+// Enable Swagger in all environments (public demo)
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "swagger/{documentName}/swagger.json";
+});
+
+app.UseStaticFiles();
+
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "EcomDemo API V1");
+    options.RoutePrefix = "swagger";
+    options.DocumentTitle = "EcomDemo API - Swagger UI";
+    options.DefaultModelsExpandDepth(-1);
+    
+    // Custom CSS/JS paths (optional)
+    options.InjectStylesheet("./swagger-ui/custom.css");
+    options.InjectJavascript("./swagger-ui/custom.js");
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 

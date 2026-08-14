@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: ecom-demo-api
+    restart: unless-stopped
+    environment:
+      - Jwt__Key=${JWT_SECRET}
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ecom-demo.rule=Host(`ecom-demo.robertkulig-dev.eu`)"
+      - "traefik.http.routers.ecom-demo.entrypoints=websecure"
+      - "traefik.http.routers.ecom-demo.tls=true"
+      - "traefik.http.services.ecom-demo.loadbalancer.server.port=8080"
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
