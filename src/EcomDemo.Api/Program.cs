@@ -75,7 +75,7 @@ app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "EcomDemo API V1");
-    options.RoutePrefix = string.Empty;
+    options.RoutePrefix = "swagger";
     options.DocumentTitle = "EcomDemo API - Swagger UI";
     
 });
