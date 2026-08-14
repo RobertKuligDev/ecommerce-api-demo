@@ -74,8 +74,7 @@ app.UseSwagger(c =>
     c.RouteTemplate = "swagger/{documentName}/swagger.json";
 });
 
-app.UseStaticFiles();
-
+// SwaggerUI serves embedded resources, not static files
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "EcomDemo API V1");
@@ -87,6 +86,8 @@ app.UseSwaggerUI(options =>
     options.InjectStylesheet("./swagger-ui/custom.css");
     options.InjectJavascript("./swagger-ui/custom.js");
 });
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
