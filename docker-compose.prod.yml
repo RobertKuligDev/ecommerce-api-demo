@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - Jwt__Key=ecom-demo-local-secret-32b-please-rotate-in-production
+      - Jwt__Key=${JWT_SECRET}
     networks:
       - traefik-net
     healthcheck:
