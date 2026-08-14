@@ -69,25 +69,16 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 
 // Enable Swagger in all environments (public demo)
-app.UseSwagger(c =>
-{
-    c.RouteTemplate = "swagger/{documentName}/swagger.json";
-});
+app.UseSwagger();
 
 // SwaggerUI serves embedded resources, not static files
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "EcomDemo API V1");
-    options.RoutePrefix = "swagger";
+    options.RoutePrefix = string.Empty;
     options.DocumentTitle = "EcomDemo API - Swagger UI";
-    options.DefaultModelsExpandDepth(-1);
     
-    // Custom CSS/JS paths (optional)
-    options.InjectStylesheet("./swagger-ui/custom.css");
-    options.InjectJavascript("./swagger-ui/custom.js");
 });
-
-app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -96,6 +87,12 @@ var api = app.MapGroup("/api");
 api.MapAccounts();
 api.MapProducts();
 api.MapBaskets();
+
+// Diagnostic endpoint
+app.MapGet("/build-check", () => Results.Ok(new { 
+    build = "v2-swagger-fix", 
+    timestamp = DateTime.UtcNow 
+}));
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
    .ExcludeFromDescription();
