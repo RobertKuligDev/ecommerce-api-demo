@@ -2,20 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy only csproj first for better layer caching
-COPY src/EcomDemo.Domain/EcomDemo.Domain.csproj src/EcomDemo.Domain/
-COPY src/EcomDemo.Application/EcomDemo.Application.csproj src/EcomDemo.Application/
-COPY src/EcomDemo.Infrastructure/EcomDemo.Infrastructure.csproj src/EcomDemo.Infrastructure/
-COPY src/EcomDemo.Api/EcomDemo.Api.csproj src/EcomDemo.Api/
-COPY tests/EcomDemo.Tests/EcomDemo.Tests.csproj tests/EcomDemo.Tests/
-COPY EcomDemo.sln .
-
-RUN dotnet restore
-
-# Copy everything and build
+# Copy everything first to ensure all csproj and solution files are present for restore
 COPY . .
-RUN dotnet build -c Release --no-restore --warnaserror
-RUN dotnet test -c Release --no-build --no-restore
+
+RUN dotnet restore EcomDemo.sln
+
+# Build, test and publish
+RUN dotnet build EcomDemo.sln -c Release --no-restore --warnaserror
+RUN dotnet test tests/EcomDemo.Tests/EcomDemo.Tests.csproj -c Release --no-build --no-restore
 RUN dotnet publish src/EcomDemo.Api/EcomDemo.Api.csproj -c Release -o /app --no-build
 
 # Runtime stage: minimal image
