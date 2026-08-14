@@ -9,7 +9,7 @@ services:
     networks:
       - traefik-net
     healthcheck:
-      test: ["CMD", "dotnet", "exec", "--eval", "System.Net.Http.HttpClient().GetAsync('http://localhost:8080/health').Result.EnsureSuccessStatusCode()"]
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && cat <&3 | grep -q '200 OK'"]
       interval: 15s
       timeout: 5s
       retries: 3
