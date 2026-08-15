@@ -16,6 +16,9 @@ RUN dotnet publish src/EcomDemo.Api/EcomDemo.Api.csproj -c Release -o /app --no-
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
+# Install curl for health checks (Debian/Ubuntu version)
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 # Security: run as non-root
 RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --ingroup appgroup appuser
