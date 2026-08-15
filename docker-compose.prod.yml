@@ -1,5 +1,6 @@
 services:
   api:
+    build: .
     image: robertkuligdev/ecom-demo-api:latest
     container_name: ecom-demo-api
     restart: unless-stopped
