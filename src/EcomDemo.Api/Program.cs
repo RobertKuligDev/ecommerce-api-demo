@@ -80,6 +80,17 @@ app.UseSwaggerUI(options =>
     
 });
 
+// CORS Configuration
+app.UseCors(policy => policy
+    .WithOrigins(
+        "http://localhost:4200", // Angular dev server
+        "https://ecom-demo.robertkulig-dev.eu" // URL frontend (eg. Vercel/Netlify)
+    )
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials() // Required to send tokens JWT by browser
+);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
