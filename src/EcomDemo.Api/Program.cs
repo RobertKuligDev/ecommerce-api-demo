@@ -21,6 +21,9 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 builder.Services.AddApi();
 
+// CORS Services registration in DI container
+builder.Services.AddCors();
+
 var jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
     builder.Configuration["Jwt:Key"] ?? "ecom-demo-public-secret-32b-please-rotate"));
 
